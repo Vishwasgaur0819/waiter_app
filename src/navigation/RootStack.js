@@ -55,11 +55,13 @@ function RootStack() {
             <Stack.Screen
                 name="TableView"
                 component={TableView}
-                options={{
+                options={({navigation})=>{
+                    console.log({navigation})
+                    return ({
                     headerTitle: (props) => <LogoTitle {...props} title='POINT OF SALE' />,
                     headerRight: () => <TouchableOpacity><FAIcon name='bell-o' size={20} /></TouchableOpacity>,
-                    headerLeft: (props) => <TouchableOpacity ><FAIcon name='home' size={25} /></TouchableOpacity>
-                }}
+                    headerLeft: (props) => <TouchableOpacity onPress={()=>navigation.popToTop()} ><FAIcon name='home' size={25} /></TouchableOpacity>
+                })}}
             />
         </Stack.Navigator>
     );

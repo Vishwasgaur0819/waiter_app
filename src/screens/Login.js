@@ -1,10 +1,14 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, View, Image } from 'react-native';
-import { TextInput, Button, Text, HelperText, Dialog, Portal } from 'react-native-paper';
+import { TextInput, Button, Text, HelperText, Dialog, Portal, ActivityIndicator } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { AuthContext } from '../context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getData } from '../api/apiRequest';
+import apiRoutes from '../api/apiEndpoints';
+import { fetchOfflineData } from '../commonRepo';
+import LoadingPage from './LoadingPage';
 
 const Login = () => {
     const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
@@ -13,7 +17,8 @@ const Login = () => {
     const [error, setError] = useState('');
     const [isSuccessDialogVisible, setIsSuccessDialogVisible] = useState(false);
     const [isErrorDialogVisible, setIsErrorDialogVisible] = useState(false);
-    const [passwordVisible, setPasswordVisible] = useState(false); // State to toggle password visibility
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const navigation = useNavigation();
 
@@ -32,17 +37,23 @@ const Login = () => {
         setEmail(text);
     };
 
-    const handleLogin = async() => {
+    const handleLogin = async () => {
         if (!email || !password) {
             setError('Both fields are required');
         } else if (!error) {
-            if ((email.toLocaleLowerCase() === 'waiter@gmail.com') && password === '12345') {
-          
-                navigation.reset({
-                    index: 0,
-                    routes: [{ name: 'Home' }]
-               }) // Navigate to the Home screen
-                await AsyncStorage.setItem('token','tokentoken');
+            if ((email.toLocaleLowerCase() === 'w@g.com') && password === '12345') {
+                setLoading(true);
+                let res = await fetchOfflineData();
+                if (res) {
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'Home' }]
+                    })
+                    await AsyncStorage.setItem('token', 'tokentoken');
+                    setLoading(false);
+                } else {
+                    console.log('Offline data not found')
+                }
             } else {
                 setIsErrorDialogVisible(true); // Show "User Not Found" popup
             }
@@ -57,19 +68,27 @@ const Login = () => {
     const handleErrorDialogDismiss = () => {
         setIsErrorDialogVisible(false);
     };
+    if (loading) {
+        return (
+            <LoadingPage messages={[
+                'Loading resources, please wait...',
+                'Almost there...',
+                'Just a moment more!',
+            ]} />
+        )
+    }
 
-    
     return (
         <View style={styles.container}>
-          
-            <View style={{ flex: 1,justifyContent:'center' }} >
+
+            <View style={{ flex: 1, justifyContent: 'center' }} >
                 <Image
                     source={require('../images/food2.png')} // Replace with your logo URL or local image
                     style={styles.logo}
                 />
             </View>
             {/* Welcome Message */}
-            <View style={{flex:2,width:'100%'}} >
+            <View style={{ flex: 2, width: '100%' }} >
                 <View style={styles.welcomeTextView} >
                     <Text variant="headlineMedium" style={styles.welcomeText}>
                         Welcome to the

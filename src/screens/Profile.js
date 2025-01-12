@@ -8,6 +8,7 @@ const Profile = ({navigation}) => {
 
     const handleLogout = async () => {
         await AsyncStorage.removeItem('token');
+        await AsyncStorage.removeItem('@offlineData');
         navigation.replace('Login');
         // Implement logout logic here
       }

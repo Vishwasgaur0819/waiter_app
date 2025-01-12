@@ -1,14 +1,23 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import OrderTypeSelection from '../components/OrderTypeSelection'
 import Spacer from '../components/shared/Spacer'
 import TablesList from '../components/DineIn'
 import CategoryAndProducts from '../components/CategoryAndProducts'
+import { getData } from '../api/apiRequest'
+import apiRoutes from '../api/apiEndpoints'
+import useGetLocalData from '../hooks/useGetLocalData'
+import LoadingPage from './LoadingPage'
 
 const Home = ({ navigation }) => {
-
+  // const {floors,loading} = useGetLocalData();
   const [typeId, setTypeId] = useState(null);
+
+
+  // if(loading){
+  //   return <LoadingPage/>
+  // }
 
 
   return (
@@ -16,8 +25,8 @@ const Home = ({ navigation }) => {
       <Spacer />
       <OrderTypeSelection selectedValue={typeId} setSelectedValue={setTypeId} />
       <Spacer />
-      {typeId==1 &&<TablesList/>}
-      {typeId==2 &&<CategoryAndProducts/>}
+      {typeId == 1 && <TablesList />}
+      {typeId == 2 && <CategoryAndProducts />}
     </View>
   )
 }

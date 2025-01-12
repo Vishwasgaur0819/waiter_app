@@ -1,12 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import Dropdown_C from './shared/Dropdown_C'
 import { Button } from 'react-native-paper';
 import TablesList from './TablesList';
 import Spacer from './shared/Spacer';
+import useGetLocalData from '../hooks/useGetLocalData';
+import LoadingPage from '../screens/LoadingPage';
 
 const DineIn = () => {
-
+    const {floors,loading} = useGetLocalData();
     const [selectedOption, setSelectedOption] = useState(1);
     const tableStatuses = [
         { label: 'PRINT TABLE', id: 1, color: '#ffc7c7', borderColor: '#ffc7c7' },
@@ -14,17 +16,23 @@ const DineIn = () => {
         { label: 'OPEN TABLE', id: 3, color: 'white', borderColor: 'gray' }
     ]
 
-    const dropdownData = [{ name: 'Ground Floor', id: 1 }, { name: 'First Floor', id: 2 }, { name: 'Second Floor', id: 3 }]
+    const memoizedFloors = useMemo(() => {
+        return floors?.map(({ id, name }) => ({ id, name }));
+    }, [floors]);
+
     const handleSelect = (option) => {
         setSelectedOption(option.id);
     };
+    if(loading){
+        return <LoadingPage/>
+    }
     return (
         <View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }} >
                 <Dropdown_C
-                    options={dropdownData}
+                    options={memoizedFloors}
                     onSelect={handleSelect}
-                    selectedValue={dropdownData?.filter(i => i?.id == selectedOption)?.[0]?.name}
+                    selectedValue={memoizedFloors?.filter(i => i?.id == selectedOption)?.[0]?.name}
                     placeholder="Ground Floor"
                     buttonHeight={30}
                 />
