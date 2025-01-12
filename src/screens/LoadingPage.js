@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ActivityIndicator, Text } from 'react-native-paper';
+import colors from '../styles/colors';
 
 const LoadingPage = ({messages=['Loading...']}) => {
     const [messageIndex, setMessageIndex] = useState(0);
@@ -28,7 +29,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#f5f5f5',
+        backgroundColor:colors.background,
+        
     },
     message: {
         marginTop: 20,

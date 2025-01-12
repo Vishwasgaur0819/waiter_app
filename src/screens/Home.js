@@ -9,6 +9,7 @@ import { getData } from '../api/apiRequest'
 import apiRoutes from '../api/apiEndpoints'
 import useGetLocalData from '../hooks/useGetLocalData'
 import LoadingPage from './LoadingPage'
+import colors from '../styles/colors'
 
 const Home = ({ navigation }) => {
   // const {floors,loading} = useGetLocalData();
@@ -21,12 +22,14 @@ const Home = ({ navigation }) => {
 
 
   return (
-    <View style={styles.container} >
-      <Spacer />
-      <OrderTypeSelection selectedValue={typeId} setSelectedValue={setTypeId} />
-      <Spacer />
-      {typeId == 1 && <TablesList />}
-      {typeId == 2 && <CategoryAndProducts />}
+    <View style={{backgroundColor:colors.background,flex: 1,}} >
+      <View style={styles.container} >
+        <Spacer />
+        <OrderTypeSelection selectedValue={typeId} setSelectedValue={setTypeId} />
+        <Spacer />
+        {typeId == 1 && <TablesList />}
+        {typeId == 2 && <CategoryAndProducts orderType={'takeaway'} />}
+      </View>
     </View>
   )
 }
@@ -39,6 +42,6 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     alignItems: 'center',
     width: '93%',
-    alignSelf: 'center'
+    alignSelf: 'center',
   }
 })

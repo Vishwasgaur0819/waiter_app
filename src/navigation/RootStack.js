@@ -9,6 +9,7 @@ import { Button } from 'react-native-paper';
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 import HomeBottomTabs from './HomeBottomTabs';
 import TableView from '../screens/TableView';
+import Header from '../components/shared/Header';
 
 
 const Stack = createNativeStackNavigator();
@@ -46,22 +47,16 @@ function RootStack() {
             <Stack.Screen
                 name="Home"
                 component={HomeBottomTabs}
-                options={{
-                    headerTitle: (props) => <LogoTitle {...props} title='POINT OF SALE' />,
-                    headerRight: () => <TouchableOpacity><FAIcon name='bell-o' size={20} /></TouchableOpacity>,
-                    headerLeft: () => <FAIcon name='bars' size={20} />
-                }}
+                options={({ navigation }) => ({
+                    header: () => <Header title="POINT OF SALE" navigation={navigation} />
+                })}
             />
             <Stack.Screen
                 name="TableView"
                 component={TableView}
-                options={({navigation})=>{
-                    console.log({navigation})
-                    return ({
-                    headerTitle: (props) => <LogoTitle {...props} title='POINT OF SALE' />,
-                    headerRight: () => <TouchableOpacity><FAIcon name='bell-o' size={20} /></TouchableOpacity>,
-                    headerLeft: (props) => <TouchableOpacity onPress={()=>navigation.popToTop()} ><FAIcon name='home' size={25} /></TouchableOpacity>
-                })}}
+                options={({ navigation }) => ({
+                    header: () => <Header title="POINT OF SALE" navigation={navigation} />
+                })}
             />
         </Stack.Navigator>
     );

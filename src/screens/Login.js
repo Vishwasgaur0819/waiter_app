@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, View, Image } from 'react-native';
-import { TextInput, Button, Text, HelperText, Dialog, Portal, ActivityIndicator } from 'react-native-paper';
+import { TextInput, Button, Text, HelperText, Dialog, Portal} from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { AuthContext } from '../context/AuthContext';
@@ -9,6 +9,7 @@ import { getData } from '../api/apiRequest';
 import apiRoutes from '../api/apiEndpoints';
 import { fetchOfflineData } from '../commonRepo';
 import LoadingPage from './LoadingPage';
+import colors from '../styles/colors';
 
 const Login = () => {
     const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
@@ -81,10 +82,11 @@ const Login = () => {
     return (
         <View style={styles.container}>
 
-            <View style={{ flex: 1, justifyContent: 'center' }} >
+            <View style={{ flex: 1.5, justifyContent: 'center', }} >
                 <Image
-                    source={require('../images/food2.png')} // Replace with your logo URL or local image
+                    source={require('../assets/images/login_waiter.png')} // Replace with your logo URL or local image
                     style={styles.logo}
+                    resizeMode='contained'
                 />
             </View>
             {/* Welcome Message */}
@@ -107,7 +109,8 @@ const Login = () => {
                     keyboardType="email-address"
                     error={!!error}
                     style={styles.input}
-                    left={<TextInput.Icon icon="email" />}
+                    left={<TextInput.Icon icon="email" color={colors.splash_background}/>}
+                    activeOutlineColor={colors.splash_background}
                 />
                 {error ? <HelperText type="error" padding='none' style={{ alignSelf: 'flex-start', }} visible>{error}</HelperText> : null}
 
@@ -119,14 +122,15 @@ const Login = () => {
                     mode="outlined"
                     secureTextEntry={!passwordVisible}
                     style={styles.input}
-                    left={<TextInput.Icon icon="lock" />}
+                    left={<TextInput.Icon icon="lock" color={colors.splash_background} />}
+                    activeOutlineColor={colors.splash_background}
                     right={
                         <TextInput.Icon
                             icon={() => (
                                 <Icon
                                     name={passwordVisible ? 'eye' : 'eye-off'}
                                     size={24}
-                                    color="rgb(109 132 109)"
+                                    color={colors.splash_background}
                                     onPress={() => setPasswordVisible(!passwordVisible)} // Toggle password visibility
                                 />
                             )}
@@ -172,25 +176,25 @@ const styles = StyleSheet.create({
         backgroundColor: '#f8f9fa',
     },
     logo: {
-        width: 150,
-        height: 150,
-        marginBottom: 20,
+        // width: 300,
+        // height: 300,
+        // marginBottom: 20,
     },
     welcomeText: {
         textAlign: 'center',
         textAlign: 'left',
         fontSize: 23,
-        color: 'rgb(109 132 109)'
+        color: colors.splash_background
     },
     welcomeTextAppName: {
         textAlign: 'center',
         textAlign: 'left',
         fontSize: 35,
         fontWeight: 'bold',
-        color: 'rgb(109 132 109)'
+        color:colors.splash_background
     },
     welcomeTextView: {
-        marginBottom: 30,
+        marginBottom: 10,
         // backgroundColor:'red',
         width: '100%',
     },
@@ -201,7 +205,7 @@ const styles = StyleSheet.create({
     },
     button: {
         marginTop: 8,
-        backgroundColor: 'rgb(109 132 109)',
+        backgroundColor:colors.splash_background,
         width: '100%',
         borderRadius: 5
     },

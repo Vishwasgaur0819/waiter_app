@@ -3,6 +3,7 @@ import React from 'react'
 import { Button } from 'react-native-paper';
 import FAIcon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import colors from '../styles/colors';
 
 const Profile = ({navigation}) => {
 
@@ -14,7 +15,7 @@ const Profile = ({navigation}) => {
       }
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+        <View style={styles.main} >
             <FAIcon name='person-outline' size={100} />
             <Text style={{ textAlign: 'center' }} >Profile</Text>
             <Button style={{width:'60%'}} mode="contained" onPress={handleLogout}>
@@ -26,4 +27,6 @@ const Profile = ({navigation}) => {
 
 export default Profile
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    main:{ flex: 1, justifyContent: 'center', alignItems: 'center',backgroundColor:colors.background }
+})
