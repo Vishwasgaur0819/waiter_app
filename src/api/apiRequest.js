@@ -5,7 +5,7 @@ import apiEndpoints from "./apiEndpoints";
 export const getData = async (endPoints, params = {}) => {
     try {
         const response = await apiClient.get(endPoints, { params });
-        return response;
+        return response.data;
     } catch (error) {
         console.error('GET Request Error:', error);
         throw error;

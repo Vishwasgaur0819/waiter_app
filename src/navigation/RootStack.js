@@ -10,6 +10,7 @@ import FAIcon from 'react-native-vector-icons/FontAwesome';
 import HomeBottomTabs from './HomeBottomTabs';
 import TableView from '../screens/TableView';
 import Header from '../components/shared/Header';
+import KOT from '../screens/KOT';
 
 
 const Stack = createNativeStackNavigator();
@@ -48,14 +49,21 @@ function RootStack() {
                 name="Home"
                 component={HomeBottomTabs}
                 options={({ navigation }) => ({
-                    header: () => <Header title="POINT OF SALE" navigation={navigation} />
+                    header: () => <Header showBack={false} title="POINT OF SALE" navigation={navigation} />
                 })}
             />
             <Stack.Screen
                 name="TableView"
                 component={TableView}
                 options={({ navigation }) => ({
-                    header: () => <Header title="POINT OF SALE" navigation={navigation} />
+                    header: () => <Header title="FOOD MENU" navigation={navigation} />
+                })}
+            />
+            <Stack.Screen
+                name="KOT"
+                component={KOT}
+                options={({ navigation }) => ({
+                    header: () => <Header title="KOT" navigation={navigation} />
                 })}
             />
         </Stack.Navigator>

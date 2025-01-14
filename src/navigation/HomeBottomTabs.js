@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 import Home from '../screens/Home';
@@ -9,22 +9,47 @@ import AllOrders from '../screens/AllOrders';
 import Cart from '../screens/Cart';
 import colors from '../styles/colors';
 import { useSelector } from 'react-redux';
+import { FontFamily } from '../assets/fonts/FontFamily';
 const Tab = createBottomTabNavigator();
 
-const CartBadge=()=>{
+const CartBadge = () => {
+    const orderedItems = useSelector(state => state.orderedItems?.orderItems);
+    const [cartCount, setCartCount] = useState(0);
+
+    useEffect(() => {
+        let keys = Object.keys(orderedItems);
+        let arrayOfTableIds = keys.length ? keys?.map(key => key.split('-')[0]) : [];
+        let mymap = new Map();
+        let uniqueTables = arrayOfTableIds?.filter(tabId => {
+            const val = mymap.get(tabId);
+            if (val) {
+                if (tabId < val) {
+                    mymap.delete(tabId);
+                    mymap.set(tabId, tabId);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            mymap.set(tabId, tabId);
+            return true;
+        });
+        setCartCount(uniqueTables?.length||0)
+        // console.log('uniqueTables',uniqueTables)
+        
+    }, [])
 
 
-    
-    return(
+    return (
         <View style={{
             width: 18, height: 18,
             borderRadius: 40, justifyContent: 'center',
             alignItems: 'center', position: 'absolute',
-            right:-12,
-            top:-10,
-            backgroundColor:'red'
+            right: -12,
+            top: -10,
+            backgroundColor: 'red'
         }} >
-            <Text style={{fontSize:8,fontWeight:'bold',color:'white'}} >{0}</Text>
+            <Text style={{ fontSize: 8, fontWeight: 'bold', color: 'white' }} >{cartCount}</Text>
         </View>
     )
 }
@@ -47,12 +72,13 @@ const HomeBottomTabs = () => {
                     }
                     return (
                         <View>
-                            {iconName == 'shopping-bag' && <CartBadge/>}
+                            {iconName == 'shopping-bag' && <CartBadge />}
                             <FAIcon name={iconName} size={size - 3} color={color} />
                         </View>
                     )
 
                 },
+                tabBarLabelStyle:{fontFamily:FontFamily.TTCommonsMedium},
                 headerShown: false,
                 tabBarActiveTintColor: colors.splash_background,
                 tabBarInactiveTintColor: 'gray',

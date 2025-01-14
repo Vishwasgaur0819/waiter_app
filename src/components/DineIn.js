@@ -6,9 +6,12 @@ import TablesList from './TablesList';
 import Spacer from './shared/Spacer';
 import useGetLocalData from '../hooks/useGetLocalData';
 import LoadingPage from '../screens/LoadingPage';
+import useGetFloors from '../hooks/useGetFloors';
+import { FontSize } from '../assets/fonts/Fonts';
+import { FontFamily } from '../assets/fonts/FontFamily';
 
 const DineIn = () => {
-    const {floors,loading} = useGetLocalData();
+    const {floors,loading} = useGetFloors();
     const [selectedOption, setSelectedOption] = useState(1);
     const tableStatuses = [
         { label: 'PRINT TABLE', id: 1, color: '#ffc7c7', borderColor: '#ffc7c7' },
@@ -59,8 +62,8 @@ export default DineIn
 
 const styles = StyleSheet.create({
     txtStyle: {
-        fontSize: 8,
-        color: '#000',
+        fontSize: FontSize.tiny,
+        fontFamily:FontFamily.TTCommonsMedium,
         marginLeft: 2
     },
     viewStyle: {

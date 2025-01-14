@@ -59,6 +59,7 @@ const Login = () => {
                 setIsErrorDialogVisible(true); // Show "User Not Found" popup
             }
         }
+        setLoading(false);
     };
 
     const handleSuccessDialogDismiss = () => {

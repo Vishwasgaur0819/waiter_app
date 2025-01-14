@@ -5,10 +5,12 @@ import { getData } from "./api/apiRequest";
 const fetchOfflineData = async () => {
     try {
         const res = await getData(apiRoutes.getOfflineData);
-        // console.log('Fetched Offline Data:', JSON.stringify(res?.data));
-        if (res?.status) {
-            let stringifiedData = JSON.stringify(res.data);
-            await AsyncStorage.setItem('@offlineData',stringifiedData)
+        if (res?.success) {
+            const {halls,categories,products} = res?.data;
+            console.log('halls==>> ', halls);
+            await AsyncStorage.setItem('@floors',JSON.stringify(halls))
+            await AsyncStorage.setItem('@categories',JSON.stringify(categories))
+            await AsyncStorage.setItem('@products',JSON.stringify(products))
             return true
         }
         return null

@@ -7,14 +7,14 @@ const orderedItemSlice = createSlice({
     },
     reducers: {
         addItemToTableOrder: (state, action) => {
-            const { tableId, item, quantity } = action.payload;
-            if (quantity == 0) {
+            const { tableId, item} = action.payload;
+            if (item?.quantity == 0) {
                 delete state.orderItems[`${tableId}-${item.id}`]
                 // console.log("tableOrders in redux ", state.orderItems)
                 return
             }
-            state.orderItems[`${tableId}-${item.id}`] = { ...item, quantity }
-            // console.log("tableOrders in redux ", state.orderItems)
+            state.orderItems[`${tableId}-${item.id}`] = { ...item,tableId }
+            console.log("tableOrders in redux ", state.orderItems)
         },
         addItemToTakeawayOrder: (state, action) => {
             const { item } = action.payload;

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Menu, Button, IconButton, Text } from 'react-native-paper';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { FontFamily } from '../../assets/fonts/FontFamily';
+import { FontSize } from '../../assets/fonts/Fonts';
 
 const Dropdown_C = ({
     options = [],
@@ -54,6 +56,7 @@ const Dropdown_C = ({
                         key={index}
                         onPress={() => handleOptionSelect(option)}
                         title={option?.name}
+                        titleStyle={{fontFamily:FontFamily.TTCommonsMedium}}
                     />
                 ))}
             </Menu>
@@ -79,8 +82,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     buttonText: {
-        fontSize: 14,
+        fontSize: FontSize.medium,
         color: '#000',
+        fontFamily:FontFamily.TTCommonsMedium
     },
 });
 

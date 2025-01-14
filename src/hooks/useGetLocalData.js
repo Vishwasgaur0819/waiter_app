@@ -18,7 +18,6 @@ const useGetLocalData = () => {
                     const parsedData = JSON.parse(data);
                     const floors = parsedData?.data?.halls;
                     const categories = parsedData?.data?.categories;
-                    categories.unshift({id:0,name:'All DISHES'});
                     const products = parsedData?.data?.products;
                     setFloors(floors);
                     setCategories(categories);
