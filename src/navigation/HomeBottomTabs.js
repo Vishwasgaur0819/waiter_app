@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 import Home from '../screens/Home';
@@ -10,35 +10,10 @@ import Cart from '../screens/Cart';
 import colors from '../styles/colors';
 import { useSelector } from 'react-redux';
 import { FontFamily } from '../assets/fonts/FontFamily';
+import { useFocusEffect } from '@react-navigation/native';
 const Tab = createBottomTabNavigator();
 
-const CartBadge = () => {
-    const orderedItems = useSelector(state => state.orderedItems?.orderItems);
-    const [cartCount, setCartCount] = useState(0);
-
-    useEffect(() => {
-        let keys = Object.keys(orderedItems);
-        let arrayOfTableIds = keys.length ? keys?.map(key => key.split('-')[0]) : [];
-        let mymap = new Map();
-        let uniqueTables = arrayOfTableIds?.filter(tabId => {
-            const val = mymap.get(tabId);
-            if (val) {
-                if (tabId < val) {
-                    mymap.delete(tabId);
-                    mymap.set(tabId, tabId);
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-            mymap.set(tabId, tabId);
-            return true;
-        });
-        setCartCount(uniqueTables?.length||0)
-        // console.log('uniqueTables',uniqueTables)
-        
-    }, [])
-
+const CartBadge = ({cartCount}) => {
 
     return (
         <View style={{
@@ -54,6 +29,33 @@ const CartBadge = () => {
     )
 }
 const HomeBottomTabs = () => {
+    const orderedItems = useSelector(state => state.orderedItems?.orderItems);
+    const [cartCount, setCartCount] = useState(0);
+    
+    useFocusEffect(
+        useCallback(() => {
+            let keys = Object.keys(orderedItems);
+            let arrayOfTableIds = keys.length ? keys?.map(key => key.split('-')[0]) : [];
+            let mymap = new Map();
+            let uniqueTables = arrayOfTableIds?.filter(tabId => {
+                const val = mymap.get(tabId);
+                if (val) {
+                    if (tabId < val) {
+                        mymap.delete(tabId);
+                        mymap.set(tabId, tabId);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+                mymap.set(tabId, tabId);
+                return true;
+            });
+            setCartCount(uniqueTables?.length || 0)
+        }, [orderedItems])
+    )
+
+
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -72,13 +74,13 @@ const HomeBottomTabs = () => {
                     }
                     return (
                         <View>
-                            {iconName == 'shopping-bag' && <CartBadge />}
+                            {iconName == 'shopping-bag' && <CartBadge cartCount={cartCount}/>}
                             <FAIcon name={iconName} size={size - 3} color={color} />
                         </View>
                     )
 
                 },
-                tabBarLabelStyle:{fontFamily:FontFamily.TTCommonsMedium},
+                tabBarLabelStyle: { fontFamily: FontFamily.TTCommonsMedium },
                 headerShown: false,
                 tabBarActiveTintColor: colors.splash_background,
                 tabBarInactiveTintColor: 'gray',

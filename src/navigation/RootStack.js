@@ -33,7 +33,7 @@ function RootStack() {
     }
 
     return (
-        <Stack.Navigator screenOptions={{ headerShown: true }} initialRouteName={'Splash'} >
+        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={'Splash'} >
 
             <Stack.Screen
                 name="Splash"

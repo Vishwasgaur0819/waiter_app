@@ -7,6 +7,8 @@ const colors = {
     black:'#000',
     border:'lightgray',
     white:'#FFFFFF',
+    grey:'grey',
+    lightgrey:'lightgrey',
     // --------------------------
     splash_background:'#36454F',
     forgot_passward_txt:'#E80724',

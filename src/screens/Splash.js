@@ -1,6 +1,7 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../context/AuthContext';
+import colors from '../styles/colors';
 
 const Splash = ({ navigation }) => {
 
@@ -29,12 +30,13 @@ const Splash = ({ navigation }) => {
 
     return (
         <View style={styles.container} >
-            <View style={{ width: 250, height: 250, backgroundColor: 'white', borderRadius: 200, justifyContent: 'center', alignItems: 'center' }}>
+            {/* <View style={{ width: 250, height: 250, backgroundColor: 'white', borderRadius: 200, justifyContent: 'center', alignItems: 'center' }}> */}
                 <Image
-                    source={require('../images/food1.png')}
-                    style={{ width: 180, height: 180, top: -15 }}
+                    source={require('../assets/images/splash_logo.png')}
+                    style={{}}
+                    resizeMode='contained'
                 />
-            </View>
+            {/* </View> */}
         </View>
     )
 }
@@ -42,6 +44,6 @@ const Splash = ({ navigation }) => {
 export default Splash
 
 const styles = StyleSheet.create({
-    container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgb(109 132 109)' },
+    container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor:colors.splash_background },
     txtStyle: { textAlign: 'center', fontSize: 30 }
 })

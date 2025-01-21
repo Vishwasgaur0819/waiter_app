@@ -20,7 +20,7 @@ export default FloorTableTitleCard
 const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
-        width: '100%',
+        // width: '100%',
         height: 35,
         alignItems: 'center',
         // justifyContent:'center'

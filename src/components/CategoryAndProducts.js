@@ -8,8 +8,9 @@ import useGetLocalData from '../hooks/useGetLocalData';
 import LoadingPage from '../screens/LoadingPage';
 import { useSelector } from 'react-redux';
 import useGetCategories from '../hooks/useGetCategories';
+import Header from './shared/Header';
 
-const CategoryAndProducts = ({ orderType, tableId }) => {
+const CategoryAndProducts = ({ orderType, tableId,floor }) => {
     const orderedItems = useSelector(state => state.orderedItems?.orderItems);
     const [categoryId, setCategoryId] = useState(0);
    
@@ -17,12 +18,13 @@ const CategoryAndProducts = ({ orderType, tableId }) => {
 
     return (
         <View style={{ flex: 1, flexDirection: 'row',}} >
+            
             <View style={{ flex: 2, }} >
                 <CategoryList onSelect={(i) => setCategoryId(i.id)} />
             </View>
             <Spacer h={5} />
             <View style={{ flex: 5,}} >
-                <ProductList orderedItems={orderedItems} orderType={orderType} tableId={tableId} category={categoryId} />
+                <ProductList floor={floor} orderedItems={orderedItems} orderType={orderType} tableId={tableId} category={categoryId} />
             </View>
 
         </View>

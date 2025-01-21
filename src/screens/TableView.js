@@ -8,6 +8,7 @@ import { FontSize } from '../assets/fonts/Fonts';
 import { FontFamily } from '../assets/fonts/FontFamily';
 import useGetFloors from '../hooks/useGetFloors';
 import FloorTableTitleCard from '../components/FloorTableTitleCard';
+import Header from '../components/shared/Header';
 
 const TableView = ({ route,navigation }) => {
     const { floor, tableNo } = route.params;
@@ -15,10 +16,11 @@ const TableView = ({ route,navigation }) => {
 const title = loading ? '...' : `${floors?.filter(i => i?.id == floor)?.[0]?.name} | Table - ${tableNo}`;
     return (
         <View style={styles.mainView}>
+            <Header showBack={false} />
             <View style={styles.container}>
                 <FloorTableTitleCard title={title} />
                 <Spacer />
-                <CategoryAndProducts orderType="table" tableId={tableNo} />
+                <CategoryAndProducts orderType="table" tableId={tableNo} floor={floor} />
             </View>
             <TouchableOpacity style={styles.button} onPress={()=>{navigation.navigate('KOT',{floor,tableNo,title})}}>
                 <Text style={styles.buttonText}>KOT</Text>

@@ -20,7 +20,7 @@ const CategoryList = ({onSelect }) => {
                             <Ionicons name='fast-food-outline' size={25} />
                         </View>
                         <View style={{ flex: 4, backgroundColor: item.id == selected ? colors.border : colors.white, height: '100%', justifyContent: 'center', paddingHorizontal: 2 }} >
-                            <Text style={{ fontSize: FontSize.small,fontFamily:item.id == selected?FontFamily.TTCommonsDemiBold:FontFamily.TTCommonsMedium}}>{item?.name}</Text>
+                            <Text style={{ fontSize: FontSize.small,fontFamily:item.id == selected?FontFamily.TTCommonsDemiBold:FontFamily.TTCommonsMedium,marginLeft:item.id == selected?1:0}}>{item?.name}</Text>
                         </View>
                     </TouchableOpacity>)
             }}

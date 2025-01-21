@@ -68,7 +68,7 @@ const ProductCard = React.memo(({ tableId, orderedItems, item, handleItemChange 
     );
 });
 
-const ProductList = ({ orderedItems, category, tableId }) => {
+const ProductList = ({ orderedItems, category, tableId,floor }) => {
     const dispatch = useDispatch();
     const { products } = useGetProducts();
     const [page, setPage] = useState(1);
@@ -80,7 +80,8 @@ const ProductList = ({ orderedItems, category, tableId }) => {
     );
 
     const handleItemChange = useCallback((item, quantity) => {
-        dispatch(addItemToTableOrder({ tableId, item: { id: item.id, quantity, name: item.name } }));
+        // console.log("item",item)
+        dispatch(addItemToTableOrder({ tableId, item: { id: item.id, quantity, name: item.name,description:item?.description,floor } }));
     }, [dispatch, tableId]);
 
     const fetchMoreProducts = useCallback((i) => {

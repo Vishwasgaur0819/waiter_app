@@ -10,11 +10,20 @@ import apiRoutes from '../api/apiEndpoints'
 import useGetLocalData from '../hooks/useGetLocalData'
 import LoadingPage from './LoadingPage'
 import colors from '../styles/colors'
+import Header from '../components/shared/Header'
+import { useDispatch } from 'react-redux'
+import { removeAllItems } from '../store/reducers/orderedItemSlice'
 
 const Home = ({ navigation }) => {
   // const {floors,loading} = useGetLocalData();
   const [typeId, setTypeId] = useState(null);
+  const dispatch = useDispatch();
 
+  // useEffect(() => {
+  //   dispatch(removeAllItems());
+    
+  // }, [])
+  
 
   // if(loading){
   //   return <LoadingPage/>
@@ -22,7 +31,8 @@ const Home = ({ navigation }) => {
 
 
   return (
-    <View style={{backgroundColor:colors.background,flex: 1,}} >
+    <View style={{ backgroundColor: colors.background, flex: 1, }} >
+      <Header showBack={false} />
       <View style={styles.container} >
         <Spacer />
         <OrderTypeSelection selectedValue={typeId} setSelectedValue={setTypeId} />
