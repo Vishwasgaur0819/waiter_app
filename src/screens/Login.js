@@ -42,7 +42,7 @@ const Login = () => {
         if (!email || !password) {
             setError('Both fields are required');
         } else if (!error) {
-            if ((email.toLocaleLowerCase() === 'w@g.com') && password === '12345') {
+            if ((email.toLocaleLowerCase() === 'waiter@gmail.com') && password === '12345') {
                 setLoading(true);
                 let res = await fetchOfflineData();
                 if (res) {

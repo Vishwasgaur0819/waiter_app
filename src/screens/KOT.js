@@ -16,7 +16,7 @@ const KOT = ({ route,navigation }) => {
     const floor = data[0]?.floor;
     return (
         <View style={styles.mainView}>
-            <Header title='KOT' />
+            <Header title='KOT' onPress={()=>navigation.navigate('Home')} />
             <View style={styles.container} >
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }} >
                     {/* <FloorTableTitleCard title={title} /> */}

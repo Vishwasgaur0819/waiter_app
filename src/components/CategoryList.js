@@ -3,10 +3,10 @@ import React, { useState } from 'react'
 import colors from '../styles/colors'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import useGetCategories from '../hooks/useGetCategories';
-import { fontSize } from '../assets/fonts/FontSize';
 import { FontFamily } from '../assets/fonts/FontFamily';
 import { FontSize } from '../assets/fonts/Fonts';
-const CategoryList = ({onSelect }) => {
+
+const CategoryList = ({ onSelect }) => {
     const { categories, loading } = useGetCategories();
     const [selected, setSelected] = useState(0);
 
@@ -20,7 +20,7 @@ const CategoryList = ({onSelect }) => {
                             <Ionicons name='fast-food-outline' size={25} />
                         </View>
                         <View style={{ flex: 4, backgroundColor: item.id == selected ? colors.border : colors.white, height: '100%', justifyContent: 'center', paddingHorizontal: 2 }} >
-                            <Text style={{ fontSize: FontSize.small,fontFamily:item.id == selected?FontFamily.TTCommonsDemiBold:FontFamily.TTCommonsMedium,marginLeft:item.id == selected?1:0}}>{item?.name}</Text>
+                            <Text style={{ fontSize: FontSize.small, fontFamily: item.id == selected ? FontFamily.TTCommonsDemiBold : FontFamily.TTCommonsMedium, marginLeft: item.id == selected ? 1 : 0 }}>{item?.name}</Text>
                         </View>
                     </TouchableOpacity>)
             }}

@@ -8,14 +8,22 @@ import { FontFamily } from '../assets/fonts/FontFamily';
 import { FontSize } from '../assets/fonts/Fonts';
 import Spacer from '../components/shared/Spacer';
 import Header from '../components/shared/Header';
+import { useDispatch } from 'react-redux';
+import { removeAllItems } from '../store/reducers/orderedItemSlice';
 
 const Profile = ({ navigation }) => {
+    const dispatch = useDispatch();
     const [userData, setUserData] = useState({ name: '', mobile: '', email: '' });
 
+
     const handleLogout = async () => {
+        dispatch(removeAllItems());
         await AsyncStorage.removeItem('token');
         await AsyncStorage.removeItem('@offlineData');
-        navigation.replace('Login');
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'Login' }]
+        })
         // Implement logout logic here
     }
 

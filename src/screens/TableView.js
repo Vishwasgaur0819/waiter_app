@@ -22,9 +22,9 @@ const title = loading ? '...' : `${floors?.filter(i => i?.id == floor)?.[0]?.nam
                 <Spacer />
                 <CategoryAndProducts orderType="table" tableId={tableNo} floor={floor} />
             </View>
-            <TouchableOpacity style={styles.button} onPress={()=>{navigation.navigate('KOT',{floor,tableNo,title})}}>
+            {/* <TouchableOpacity style={styles.button} onPress={()=>{navigation.navigate('KOT',{floor,tableNo,title})}}>
                 <Text style={styles.buttonText}>KOT</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
         </View>
     );
 };

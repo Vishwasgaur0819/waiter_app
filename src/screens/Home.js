@@ -38,7 +38,8 @@ const Home = ({ navigation }) => {
         <OrderTypeSelection selectedValue={typeId} setSelectedValue={setTypeId} />
         <Spacer />
         {typeId == 1 && <TablesList />}
-        {typeId == 2 && <CategoryAndProducts orderType={'takeaway'} />}
+        {(typeId == 2||typeId==3) && <View style={{flex:1,justifyContent:'center',alignItems:'center'}} ><Text>Comming soon...</Text></View>}
+        {/* {typeId == 2 && <CategoryAndProducts orderType={'takeaway'} />} */}
       </View>
     </View>
   )
