@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Dropdown_C from './shared/Dropdown_C'
 import { Button } from 'react-native-paper';
 import TablesList from './TablesList';
@@ -12,7 +12,7 @@ import { FontFamily } from '../assets/fonts/FontFamily';
 
 const DineIn = () => {
     const {floors,loading} = useGetFloors();
-    const [selectedOption, setSelectedOption] = useState(1);
+    const [selectedFloor, setSelectedFloor] = useState(floors?.[0]?.id);
     const tableStatuses = [
         { label: 'PRINT TABLE', id: 1, color: '#ffc7c7', borderColor: '#ffc7c7' },
         { label: 'BOOK TABLE', id: 2, color: '#d1d8d1', borderColor: '#d1d8d1' },
@@ -22,9 +22,16 @@ const DineIn = () => {
     const memoizedFloors = useMemo(() => {
         return floors?.map(({ id, name }) => ({ id, name }));
     }, [floors]);
+    useEffect(() => {
+        if(!loading){
+            setSelectedFloor(floors?.[0]?.id)
+        }
+    }, [loading])
+    
+    // console.log("floors are ", floors?.[0]?.id)
 
-    const handleSelect = (option) => {
-        setSelectedOption(option.id);
+    const handleSelectFloor = (option) => {
+        setSelectedFloor(option.id);
     };
     if(loading){
         return <LoadingPage/>
@@ -34,9 +41,9 @@ const DineIn = () => {
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }} >
                 <Dropdown_C
                     options={memoizedFloors}
-                    onSelect={handleSelect}
-                    selectedValue={memoizedFloors?.filter(i => i?.id == selectedOption)?.[0]?.name}
-                    placeholder="Ground Floor"
+                    onSelect={handleSelectFloor}
+                    selectedValue={memoizedFloors?.filter(i => i?.id == selectedFloor)?.[0]?.name}
+                    placeholder={memoizedFloors?.filter(i => i?.id == selectedFloor)?.[0]?.name}
                     buttonHeight={30}
                 />
                 <View style={styles.viewStyle} >
@@ -52,7 +59,7 @@ const DineIn = () => {
                 </View>
             </View>
             <Spacer />
-            <TablesList floor={selectedOption} />
+            <TablesList floor={selectedFloor} />
 
         </View>
     )

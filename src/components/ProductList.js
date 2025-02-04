@@ -17,7 +17,7 @@ const COLORS = {
     white: 'white',
 };
 
-const ProductCard = React.memo(({ tableId, orderedItems, item, handleItemChange }) => {
+const ProductCard = React.memo(({ tableId,tableNo, orderedItems, item, handleItemChange }) => {
     const currentQuantity = orderedItems[`${tableId}-${item.id}`]?.quantity || 0;
 
     return (
@@ -68,7 +68,7 @@ const ProductCard = React.memo(({ tableId, orderedItems, item, handleItemChange 
     );
 });
 
-const ProductList = ({ orderedItems, category, tableId,floor }) => {
+const ProductList = ({ orderedItems, category, tableId,floor,tableNo }) => {
     const dispatch = useDispatch();
     const { products } = useGetProducts();
     const [page, setPage] = useState(1);
@@ -80,8 +80,8 @@ const ProductList = ({ orderedItems, category, tableId,floor }) => {
     );
 
     const handleItemChange = useCallback((item, quantity) => {
-        // console.log("item",item)
-        dispatch(addItemToTableOrder({ tableId, item: { id: item.id, quantity, name: item.name,description:item?.description,floor } }));
+        console.log("item",item)
+        dispatch(addItemToTableOrder({ tableId, item: { id: item.id, quantity, name: item.name,description:item?.description,floor,tableNo,tableId,tableNo } }));
     }, [dispatch, tableId]);
 
     const fetchMoreProducts = useCallback((i) => {
@@ -110,6 +110,7 @@ const ProductList = ({ orderedItems, category, tableId,floor }) => {
             renderItem={({ item }) => (
                 <ProductCard
                     tableId={tableId}
+                    tableNo={tableNo}
                     orderedItems={orderedItems}
                     item={item}
                     handleItemChange={handleItemChange}

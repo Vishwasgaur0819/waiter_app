@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import useGetCategories from '../hooks/useGetCategories';
 import Header from './shared/Header';
 
-const CategoryAndProducts = ({ orderType, tableId,floor }) => {
+const CategoryAndProducts = ({ orderType, tableId,floor,tableNo }) => {
     const orderedItems = useSelector(state => state.orderedItems?.orderItems);
     const [categoryId, setCategoryId] = useState(0);
    
@@ -24,7 +24,7 @@ const CategoryAndProducts = ({ orderType, tableId,floor }) => {
             </View>
             <Spacer h={5} />
             <View style={{ flex: 5,}} >
-                <ProductList floor={floor} orderedItems={orderedItems} orderType={orderType} tableId={tableId} category={categoryId} />
+                <ProductList floor={floor} tableNo={tableNo} orderedItems={orderedItems} orderType={orderType} tableId={tableId} category={categoryId} />
             </View>
 
         </View>

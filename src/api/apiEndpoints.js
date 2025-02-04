@@ -1,5 +1,5 @@
 const apiRoutes = {
-    getOfflineData: 'api/getofflinedate',
+    getOfflineData: 'api/getofflinedate/3',
 };
 
 export default apiRoutes;

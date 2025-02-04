@@ -32,11 +32,11 @@ const Cart = ({navigation}) => {
 
     const groupedData = groupDataByTable(orderedItems);
     setTables(groupedData);
-    console.log("grouped data is ", groupedData);
+    console.log("orderedItems ", groupedData);
 
   }, [orderedItems])
 
-
+console.log("Object.keys(tables)",tables);
 
   return (
     <View style={styles.mainView} >
@@ -48,7 +48,7 @@ const Cart = ({navigation}) => {
               return (
                 <TouchableOpacity onPress={()=>{navigation.navigate('KOT',{data:tables[item]})}} key={item} style={{ flexDirection: 'row', backgroundColor: colors.white, marginTop: 10, paddingVertical: 7, paddingHorizontal: 10, justifyContent: 'space-between', borderWidth: 1, borderColor: colors.border }} >
                   <View style={{ flexDirection: 'row', alignItems: 'center', }} >
-                    <Text style={{ fontFamily: FontFamily.TTCommonsDemiBold, fontSize: FontSize.h4 }} >Table No {item}</Text>
+                    <Text style={{ fontFamily: FontFamily.TTCommonsDemiBold, fontSize: FontSize.h4 }} >Table No {tables[item]?.[0]?.tableNo||'NA'}</Text>
                     <Text style={{ fontFamily: FontFamily.TTCommonsDemiBold, marginLeft: 20, fontSize: FontSize.h4 }} >03:14 PM</Text>
                   </View>
                   <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', }} >

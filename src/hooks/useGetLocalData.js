@@ -25,7 +25,7 @@ const useGetLocalData = () => {
                     // console.log('Parsed Offline Data:', parsedData);
                 }
             } catch (e) {
-                console.log('Error getting offline data:', e);
+                console.log('Error in useGetLocalData:', e);
             }finally{
                 setLoading(false);
             }

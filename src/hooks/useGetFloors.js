@@ -11,13 +11,13 @@ const useGetFloors = () => {
             setLoading(true);
             try {
                 const data = await AsyncStorage.getItem('@floors');
-                console.log("hjhjhjh",floors)
+                console.log("floors data: " + data);
                 if (data) {
                     const parsedData = JSON.parse(data);
                     setFloors(parsedData);
                 }
             } catch (e) {
-                console.log('Error getting offline data:', e);
+                console.log('Error in useGetFloors:', e);
             } finally {
                 setLoading(false);
             }

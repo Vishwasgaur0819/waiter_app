@@ -12,8 +12,10 @@ const KOT = ({ route,navigation }) => {
     // const { floor, tableNo, title } = route?.params;
     console.log('test data', route.params.data)
     const data = route.params.data;
-    const tableNo = data[0]?.tableId;
+    const tableId = data[0]?.tableId;
+    const tableNo = data[0]?.tableNo;
     const floor = data[0]?.floor;
+    // hall_id: floor, table_no: tableNo, id: tableId 
     return (
         <View style={styles.mainView}>
             <Header title='KOT' onPress={()=>navigation.navigate('Home')} />
@@ -22,12 +24,12 @@ const KOT = ({ route,navigation }) => {
                     {/* <FloorTableTitleCard title={title} /> */}
                     <FloorTableTitleCard title={'Ground Floor | TN-01'} />
 
-                    <Button onPress={()=>navigation.navigate('TableView',{floor,tableNo})} icon="pencil" labelStyle={{ fontFamily: FontFamily.TTCommonsBold }} textColor={colors.splash_background} mode='text' style={{ borderRadius: 0, padding: 0 }}>
+                    <Button onPress={()=>navigation.navigate('TableView',{tableInfo:{hall_id:floor,table_no:tableNo,id:tableId}})} icon="pencil" labelStyle={{ fontFamily: FontFamily.TTCommonsBold }} textColor={colors.splash_background} mode='text' style={{ borderRadius: 0, padding: 0 }}>
                         Edit Dish
                     </Button>
-                    <Button icon="note" labelStyle={{ fontFamily: FontFamily.TTCommonsBold }} textColor={colors.splash_background} mode='text' style={{ borderRadius: 0, padding: 0 }} onPress={() => console.log('Pressed')}>
+                    {/* <Button icon="note" labelStyle={{ fontFamily: FontFamily.TTCommonsBold }} textColor={colors.splash_background} mode='text' style={{ borderRadius: 0, padding: 0 }} onPress={() => console.log('Pressed')}>
                         Note
-                    </Button>
+                    </Button> */}
                 </View>
                 <Spacer />
                 <KOTItemsList data={data} />

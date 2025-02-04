@@ -5,9 +5,12 @@ import Spacer from './shared/Spacer';
 import { useNavigation } from '@react-navigation/native';
 import { FontFamily } from '../assets/fonts/FontFamily';
 import { FontSize } from '../assets/fonts/Fonts';
+import useGetTables from '../hooks/useGetTables';
+import colors from '../styles/colors';
 
 const TablesList = ({ floor }) => {
     const navigation = useNavigation();
+    const {tables} = useGetTables(floor);
     // console.log({ floor })
     const data = [
         {
@@ -678,27 +681,27 @@ const TablesList = ({ floor }) => {
 
     return (
         <FlatList
-            data={data?.filter(i => i.floor == floor)}
+            data={tables}
             renderItem={({ item: i, index }) => {
                 return (
-                    <TouchableOpacity onPress={() => navigation.navigate('TableView', { tableNo: i.tableId, floor })} style={{ ...styles.tableView, backgroundColor: i.backgroundColor }} >
+                    <TouchableOpacity onPress={() => navigation.navigate('TableView', {tableInfo:i})} style={{ ...styles.tableView, backgroundColor:colors.white }} >
                         <View style={styles.tableItem} >
                             <View>
                                 <OctIcon name='people' size={25} style={{}} />
-                                <Text style={{ fontSize:FontSize.small, top: -5,fontFamily:FontFamily.TTCommonsMedium }} >{i?.peopleCount} People</Text>
+                                <Text style={{ fontSize:FontSize.small, top: -5,fontFamily:FontFamily.TTCommonsMedium }} >{i?.chair_limit} People</Text>
                             </View>
-                            <Text style={{ fontSize:FontSize.h4,fontFamily:FontFamily.TTCommonsDemiBold}} >{i?.tableId}</Text>
+                            <Text style={{ fontSize:FontSize.h4,fontFamily:FontFamily.TTCommonsDemiBold}} >{i?.table_no}</Text>
                         </View>
                         <View style={{ ...styles.tableItem, alignItems: 'flex-end' }} >
-                            <Text style={{fontFamily:FontFamily.TTCommonsMedium,fontSize:FontSize.small }} >{i?.time}</Text>
-                            <Text style={{ fontFamily:FontFamily.TTCommonsMedium,fontSize:FontSize.medium }} >${i?.amount}</Text>
+                            <Text style={{fontFamily:FontFamily.TTCommonsMedium,fontSize:FontSize.small }} >{i?.time||'_ : _'}</Text>
+                            <Text style={{ fontFamily:FontFamily.TTCommonsMedium,fontSize:FontSize.medium }} >${i?.amount||'NA'}</Text>
                         </View>
                     </TouchableOpacity>
                 )
             }}
             contentContainerStyle={{ width: '100%' }}
             numColumns={3}
-            keyExtractor={(item) => item.tableId.toString()}
+            keyExtractor={(item) => item?.id?.toString()}
             ListFooterComponent={<Spacer h={65} />}
         />
 

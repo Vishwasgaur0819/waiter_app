@@ -10,17 +10,17 @@ import useGetFloors from '../hooks/useGetFloors';
 import FloorTableTitleCard from '../components/FloorTableTitleCard';
 import Header from '../components/shared/Header';
 
-const TableView = ({ route,navigation }) => {
-    const { floor, tableNo } = route.params;
-    const {floors,loading} = useGetFloors();
-const title = loading ? '...' : `${floors?.filter(i => i?.id == floor)?.[0]?.name} | Table - ${tableNo}`;
+const TableView = ({ route, navigation }) => {
+    const { hall_id: floor, table_no: tableNo, id: tableId } = route.params?.tableInfo;
+    const { floors, loading } = useGetFloors();
+    const title = loading ? '...' : `${floors?.filter(i => i?.id == floor)?.[0]?.name} | Table - ${tableNo}`;
     return (
         <View style={styles.mainView}>
             <Header showBack={false} />
             <View style={styles.container}>
                 <FloorTableTitleCard title={title} />
                 <Spacer />
-                <CategoryAndProducts orderType="table" tableId={tableNo} floor={floor} />
+                <CategoryAndProducts orderType="table" tableId={tableId} tableNo={tableNo} floor={floor} />
             </View>
             {/* <TouchableOpacity style={styles.button} onPress={()=>{navigation.navigate('KOT',{floor,tableNo,title})}}>
                 <Text style={styles.buttonText}>KOT</Text>
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
         width: '93%',
         alignSelf: 'center',
     },
-  
+
     headerSection: {
         flex: 1,
         alignItems: 'center',

@@ -16,7 +16,7 @@ const useGetProducts = () => {
                     setProducts(parsedData);
                 }
             } catch (e) {
-                console.log('Error getting offline data:', e);
+                console.log('Error in useGetProducts:', e);
             } finally {
                 setLoading(false);
             }

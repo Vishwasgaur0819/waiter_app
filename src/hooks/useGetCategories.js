@@ -16,7 +16,7 @@ const useGetCategories = () => {
                     setCategories(parsedData);
                 }
             } catch (e) {
-                console.log('Error getting offline data:', e);
+                console.log('Error in useGetCategories:', e);
             } finally {
                 setLoading(false);
             }
