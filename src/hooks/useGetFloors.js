@@ -11,7 +11,7 @@ const useGetFloors = () => {
             setLoading(true);
             try {
                 const data = await AsyncStorage.getItem('@floors');
-                console.log("floors data: " + data);
+          
                 if (data) {
                     const parsedData = JSON.parse(data);
                     setFloors(parsedData);
