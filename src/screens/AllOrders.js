@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import colors from '../styles/colors';
 import FAIcon from 'react-native-vector-icons/AntDesign';
 import { FontFamily } from '../assets/fonts/FontFamily';
@@ -9,56 +9,84 @@ import { getData } from '../api/apiRequest';
 import apiRoutes from '../api/apiEndpoints';
 import moment from 'moment';
 
-const AllOrders = () => {
+import { useFocusEffect } from '@react-navigation/native';
+
+const AllOrders = ({ navigation }) => {
 
   const [orderList, setOrderList] = useState([])
+  const [loading, setLoading] = useState(true)
 
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await getData(apiRoutes.getOrderList);
-        if (res?.success) {
 
-          setOrderList(res?.data?.orders)
-        } else {
-          console.error(`Error in api ${apiRoutes.getOrderList}---->${res.message}`)
+  useFocusEffect(
+    useCallback(() => {
+      const fetchData = async () => {
+
+        try {
+          const res = await getData(apiRoutes.getOrderList);
+          if (res?.success) {
+            setOrderList(res?.data?.orders);
+            setLoading(false)
+          } else {
+            console.error(`Error in api ${apiRoutes.getOrderList}---->${res.message}`);
+            setLoading(false)
+
+          }
+        } catch (err) {
+          console.error(`Error in All Orders component: ${err.message}`);
+          setLoading(false)
+
         }
+      };
 
-      } catch (err) {
-        console.error(`Error in All Orders component: ${err.message}`);
-      }
-    };
+      fetchData();
+    }, [])
+  );
 
-    fetchData();
-  }, []);
-
+  const handleViewOrder = (orderItem) => {
+    try {
+      // navigation.navigate('KOT',{orderItem})
+      navigation.push('KOT', {
+        orderItem: orderItem,
+        navigateFrom: 'AllOrders'
+      });
+    } catch (err) {
+      console.error(`Error in handleViewOrder--->${err}`)
+    }
+  }
   return (
     <View style={styles.mainView}>
       <Header title='All Orders' />
       <View style={styles.container} >
+        {loading ? (
+          <Text>...loadig</Text>
+        ) : (
+          <ScrollView style={{}} >
+            {
+              orderList?.map((item) => {
+                return (
+                  <TouchableOpacity
+                    onPress={() => handleViewOrder(item)}
+                    key={item?.id} style={{ flexDirection: 'row', backgroundColor: colors.white, marginTop: 10, paddingVertical: 7, paddingHorizontal: 10, justifyContent: 'space-between', borderWidth: 1, borderColor: colors.border }} >
+                    <View style={{ flexDirection: 'row', alignItems: 'center', }} >
+                      <Text style={{ fontFamily: FontFamily.TTCommonsDemiBold, fontSize: FontSize.h4 }} >{item?.table}</Text>
+                      <Text style={{ fontFamily: FontFamily.TTCommonsDemiBold, marginLeft: 20, fontSize: FontSize.h4 }} >{moment(item?.created_at, 'YYYY-MM-DD HH:mm:ss').format('hh mm a')
+                      }</Text>
+                    </View>
+                    <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', }} >
+                      <FAIcon name='eye' color={colors.splash_background} size={25} />
+                    </TouchableOpacity>
+                  </TouchableOpacity>
+                )
+              })
+            }
+          </ScrollView>)}
+
         {/* <View style={styles.header} >
           <Text>All Orders</Text>
           <TouchableOpacity><FAIcon name='filter' size={30} /></TouchableOpacity>
         </View> */}
-        <ScrollView style={{}} >
-          {
-            orderList?.map((item) => {
-              return (
-                <TouchableOpacity key={item?.id} style={{ flexDirection: 'row', backgroundColor: colors.white, marginTop: 10, paddingVertical: 7, paddingHorizontal: 10, justifyContent: 'space-between', borderWidth: 1, borderColor: colors.border }} >
-                  <View style={{ flexDirection: 'row', alignItems: 'center', }} >
-                    <Text style={{ fontFamily: FontFamily.TTCommonsDemiBold, fontSize: FontSize.h4 }} >{item?.table}</Text>
-                    <Text style={{ fontFamily: FontFamily.TTCommonsDemiBold, marginLeft: 20, fontSize: FontSize.h4 }} >{moment(item?.created_at, 'YYYY-MM-DD HH:mm:ss').format('hh mm a')
-                    }</Text>
-                  </View>
-                  <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', }} >
-                    <FAIcon name='eye' color={colors.splash_background} size={25} />
-                  </TouchableOpacity>
-                </TouchableOpacity>
-              )
-            })
-          }
-        </ScrollView>
+
       </View>
     </View>
   )

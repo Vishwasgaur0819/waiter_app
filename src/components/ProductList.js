@@ -17,7 +17,7 @@ const COLORS = {
     white: 'white',
 };
 
-const ProductCard = React.memo(({ tableId,tableNo, orderedItems, item, handleItemChange }) => {
+const ProductCard = React.memo(({ tableId, tableNo, orderedItems, item, handleItemChange }) => {
     const currentQuantity = orderedItems[`${tableId}-${item.id}`]?.quantity || 0;
 
     return (
@@ -45,7 +45,7 @@ const ProductCard = React.memo(({ tableId,tableNo, orderedItems, item, handleIte
             </View>
             <View style={styles.actionsContainer}>
                 <View style={styles.priceContainer}>
-                    <MIcon name="currency-rupee" style={{fontSize:FontSize.small,top:1}} />
+                    <MIcon name="currency-rupee" style={{ fontSize: FontSize.small, top: 1 }} />
                     <Text style={styles.price}>{Number(item.price)}</Text>
                 </View>
                 <View style={styles.addButtonWrapper}>
@@ -68,7 +68,7 @@ const ProductCard = React.memo(({ tableId,tableNo, orderedItems, item, handleIte
     );
 });
 
-const ProductList = ({ orderedItems, category, tableId,floor,tableNo }) => {
+const ProductList = ({ orderedItems, category, tableId, floor, tableNo }) => {
     const dispatch = useDispatch();
     const { products } = useGetProducts();
     const [page, setPage] = useState(1);
@@ -80,8 +80,9 @@ const ProductList = ({ orderedItems, category, tableId,floor,tableNo }) => {
     );
 
     const handleItemChange = useCallback((item, quantity) => {
-        console.log("item",item)
-        dispatch(addItemToTableOrder({ tableId, item: { id: item.id, quantity, name: item.name,description:item?.description,floor,tableNo,tableId,tableNo } }));
+        console.log('ITEMMM', item)
+        console.log('quantity', quantity)
+        dispatch(addItemToTableOrder({ tableId, item: { id: item.id, quantity, name: item.name, description: item?.description, floor, tableNo, tableId, tableNo, business_id: item.business_id, price: item?.price, user_id: item?.user_id, status: item?.status } }));
     }, [dispatch, tableId]);
 
     const fetchMoreProducts = useCallback((i) => {
@@ -178,7 +179,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '40%',
     },
-    price: {fontFamily:FontFamily.TTCommonsDemiBold,fontSize:FontSize.small},
+    price: { fontFamily: FontFamily.TTCommonsDemiBold, fontSize: FontSize.small },
     addButtonWrapper: {
         flex: 1,
         height: 25,

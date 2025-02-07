@@ -32,11 +32,10 @@ const Cart = ({navigation}) => {
 
     const groupedData = groupDataByTable(orderedItems);
     setTables(groupedData);
-    console.log("orderedItems ", groupedData);
 
   }, [orderedItems])
 
-console.log("Object.keys(tables)",tables);
+
 
   return (
     <View style={styles.mainView} >

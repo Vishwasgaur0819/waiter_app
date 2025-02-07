@@ -10,7 +10,8 @@ import { useSelector } from 'react-redux';
 import useGetCategories from '../hooks/useGetCategories';
 import Header from './shared/Header';
 
-const CategoryAndProducts = ({ orderType, tableId,floor,tableNo }) => {
+const CategoryAndProducts = ({ orderType, tableId,floor,tableNo ,navigationFrom}) => {
+   
     const orderedItems = useSelector(state => state.orderedItems?.orderItems);
     const [categoryId, setCategoryId] = useState(0);
    

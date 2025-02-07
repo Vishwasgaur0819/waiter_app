@@ -7,26 +7,70 @@ import { FontFamily } from '../assets/fonts/FontFamily'
 import KOTItemsList from '../components/KOTItemsList'
 import Spacer from '../components/shared/Spacer'
 import Header from '../components/shared/Header'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { postData } from '../api/apiRequest'
 import apiRoutes from '../api/apiEndpoints'
+import useGetFloors from '../hooks/useGetFloors'
+import { removeItemsByTableId } from '../store/reducers/orderedItemSlice'
 
 const KOT = ({ route, navigation }) => {
+
+    const dispatch = useDispatch()
     const orderedItems = useSelector(state => state.orderedItems?.orderItems);
-    const data = route.params.data;
-    const tableId = data[0]?.tableId;
-    const tableNo = data[0]?.tableNo;
-    const floor = data[0]?.floor;
+    const data = route.params.data || route?.params.orderItem
+    const { floors, loading } = useGetFloors();
+
     const [filterData, setFilterData] = useState([])
+    const [floorName, setFloorName] = useState("");
+    const [floorId, setFloorId] = useState("");
 
 
+    const tableId = data[0]?.tableId || data?.table_id;
+    const tableNo = data[0]?.tableNo || data?.table.split('no:')[1]?.trim();
+    const floor = data[0]?.floor || floorId;
 
+    useEffect(() => {
+        if (!loading && floors && filterData.length > 0) {
+            const matchedFloor = floors.find(floor => route?.params?.navigateFrom == 'AllOrders' ? floor?.name : floor?.id === filterData[0]?.floor);
+            setFloorName(matchedFloor ? matchedFloor.name : "Unknown Floor");
+            setFloorId(matchedFloor ? matchedFloor.id : 0)
+        }
+    }, [floors, filterData, loading]);
+
+    console.log({ tableId, tableNo, floor })
+    const AllOrdersData = (orderData) => {
+        try {
+            const floor = orderData?.table.split('Table')[0]?.trim();
+
+
+            // Convert data to required format
+            const transformedData = orderData.items.map(item => ({
+                business_id: orderData.business_id,
+                description: null,
+                floor: floor,
+                id: item.product_id,
+                name: item.product_name,
+                price: item.sub_total,
+                quantity: parseInt(item.quantity),
+                status: 1,
+                tableId: parseInt(orderData.table_id),
+                tableNo: floor,
+                user_id: item.user_id
+            }));
+            return transformedData
+        } catch (er) {
+            console.log(`Error in AllOrdersData-->${er}`);
+
+        }
+    }
 
     useEffect(() => {
         const groupDataByTable = (data) => {
             const groupedData = {};
 
+
             Object.values(data).forEach(item => {
+                console.log('item', item)
                 const { tableId } = item;
 
                 if (!groupedData[tableId]) {
@@ -37,11 +81,19 @@ const KOT = ({ route, navigation }) => {
 
             return groupedData;
         };
+        if (route?.params?.navigateFrom == 'AllOrders') {
+            const datafromAllOrders = AllOrdersData(data)
+            setFilterData(datafromAllOrders)
 
-        const groupedData = groupDataByTable(orderedItems);
+        }
+        else {
+            const groupedData = groupDataByTable(orderedItems);
 
-        const filteredData = groupedData[tableId] || [];
-        setFilterData(filteredData)
+            const filteredData = groupedData[tableId] || [];
+
+            setFilterData(filteredData)
+        }
+
 
     }, [orderedItems])
 
@@ -49,48 +101,56 @@ const KOT = ({ route, navigation }) => {
     // handle save order //
     const handleSaveOrder = async () => {
         try {
+            //network condition lgaani hai //
+
             if (true) {
-                console.log('filterData', filterData);
+                const tableIdsToDelete = [...new Set(filterData.map(item => item.tableId))];
 
                 const transformedData = {
                     orders: [
                         {
-                            sub_total: 150.00,
+                            sub_total: filterData.reduce((acc, item) => acc + (item.quantity * parseFloat(item?.price)), 0).toFixed(2),
                             discount_percentage: 0,
-                            order_number: "null",
+                            order_number: `${Date.now()}`,
                             discount: 0,
                             service_charge: 0,
                             grand_total: 0,
                             paid: 0,
                             created_user_id: 3,
                             updated_user_id: 4,
-                            business_id: 3,
-                            user_id: 2,
+                            business_id: filterData[0]?.business_id,
+                            user_id: filterData[0]?.user_id,
                             table_id: filterData[0]?.tableId,
-                            table: filterData[0]?.tableNo.toString(),
+                            table: `${floorName} Table no:${filterData[0]?.tableNo} `,
                             order_type: "Takeaway",
                             payment_method: "Cash",
-                            status: "null",
-                            note: "null",
+                            status: filterData[0]?.status,
+                            note: "Arun#",
                             items: filterData.map(item => ({
                                 product_id: item.id,
-                                cart_id: "sdffsdf17",
+                                cart_id: "arun@",
                                 product_name: item.name,
                                 description: "null",
                                 quantity: item.quantity,
                                 unit_cost: 5.00,
-                                business_id: 4, // Example logic
-                                user_id: 4,
-                                sub_total: 4
+                                business_id: 4,
+                                user_id: item?.user_id,
+                                sub_total: item?.quantity * parseFloat(item?.price).toFixed(2)
                             }))
                         }
                     ]
-                };
+                }
+                if (transformedData) {
+                    const response = await postData(apiRoutes.postSaveOrder, transformedData);
+                    if (response?.message == 'Data Sync successfully.') {
+                        dispatch(removeItemsByTableId(tableIdsToDelete));
+                        alert(response?.message)
+                        navigation.navigate('Home')
+                    } else {
+                        alert(response?.message)
+                    }
+                }
 
-                console.log('Transformed Data', JSON.stringify(transformedData, null, 2));
-
-                const response = await postData(apiRoutes.postSaveOrder, transformedData);
-                console.log('response', response)
             } else {
                 alert('Network is unable.');
             }
@@ -106,9 +166,12 @@ const KOT = ({ route, navigation }) => {
             <View style={styles.container} >
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }} >
                     {/* <FloorTableTitleCard title={title} /> */}
-                    <FloorTableTitleCard title={'Ground Floor | TN-01'} />
+                    <FloorTableTitleCard title={`${route?.params?.orderItem?.table == undefined ? `${floorName} Table no:${filterData[0]?.tableNo}` : `${route?.params?.orderItem?.table}`}`} />
 
-                    <Button onPress={() => navigation.navigate('TableView', { tableInfo: { hall_id: floor, table_no: tableNo, id: tableId } })} icon="pencil" labelStyle={{ fontFamily: FontFamily.TTCommonsBold }} textColor={colors.splash_background} mode='text' style={{ borderRadius: 0, padding: 0 }}>
+                    <Button onPress={() => navigation.navigate('TableView', {
+                        tableInfo: { hall_id: floor, table_no: tableNo, id: tableId },
+                        navigationFrom: route?.params?.navigateFrom == 'AllOrders' ? 'AllOrders' : 'KOT'
+                    })} icon="pencil" labelStyle={{ fontFamily: FontFamily.TTCommonsBold }} textColor={colors.splash_background} mode='text' style={{ borderRadius: 0, padding: 0 }}>
                         Edit Dish
                     </Button>
                     {/* <Button icon="note" labelStyle={{ fontFamily: FontFamily.TTCommonsBold }} textColor={colors.splash_background} mode='text' style={{ borderRadius: 0, padding: 0 }} onPress={() => console.log('Pressed')}>
@@ -119,7 +182,7 @@ const KOT = ({ route, navigation }) => {
                 <KOTItemsList data={filterData} />
                 <Spacer />
                 <View style={{ flexDirection: 'row', alignItems: 'center' }} >
-                    <Button labelStyle={{ fontFamily: FontFamily.TTCommonsBold }} textColor={colors.splash_background} mode='elevated' style={{ borderRadius: 0, padding: 0 }} onPress={() => handleSaveOrder(filterData)}>
+                    <Button labelStyle={{ fontFamily: FontFamily.TTCommonsBold }} textColor={colors.splash_background} mode='elevated' style={{ borderRadius: 0, padding: 0 }} onPress={() => handleSaveOrder()}>
                         Save Order
                     </Button>
                     <Button icon="printer" labelStyle={{ fontFamily: FontFamily.TTCommonsBold }} textColor={colors.splash_background} mode='elevated' style={{ borderRadius: 0, padding: 0, marginLeft: 10 }} onPress={() => console.log('Pressed')}>

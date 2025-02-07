@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const useGetFloors = () => {
     const [floors, setFloors] = useState(null);
+   
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
