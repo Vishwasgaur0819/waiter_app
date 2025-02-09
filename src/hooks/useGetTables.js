@@ -12,7 +12,6 @@ const useGetTables = (floorId) => {
             try {
                 const data = await AsyncStorage.getItem('@tables');
                 const parsedData = JSON.parse(data);
-                console.log("tables data: " + data);
                 if (parsedData) {
                     let filteredData = parsedData?.filter((item)=>item?.hall_id==floorId);
                     setTables(filteredData);

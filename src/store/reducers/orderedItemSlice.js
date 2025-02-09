@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import moment from 'moment';
 
 const orderedItemSlice = createSlice({
     name: 'orderedItems',
@@ -13,7 +14,7 @@ const orderedItemSlice = createSlice({
                 console.log("tableOrders in redux ", state.orderItems)
                 return
             }
-            state.orderItems[`${tableId}-${item.id}`] = { ...item,tableId }
+            state.orderItems[`${tableId}-${item.id}`] = { ...item,tableId,time:moment().format('hh:mm A') }
         },
       
         removeAllItems:(state, action) => {

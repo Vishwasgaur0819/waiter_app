@@ -12,7 +12,8 @@ import AllOrders from './src/screens/AllOrders'
 import Profile from './src/screens/Profile'
 import { store, persistor } from './src/store/store'
 import { PersistGate } from 'redux-persist/integration/react'
-
+import NetworkInfo from './src/services/NetworkInfo'
+import Toast from 'react-native-toast-message'
 const App = () => {
   return (
     <SafeAreaProvider>
@@ -22,7 +23,9 @@ const App = () => {
           backgroundColor="#EDEBEC"
           barStyle={'dark-content'}
         />
+        <Toast/>
         <ReduxProvider store={store} >
+          <NetworkInfo />
           <PersistGate loading={null} persistor={persistor}>
             <PaperProvider>
               <NavigationContainer>

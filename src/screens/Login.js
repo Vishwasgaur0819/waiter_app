@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, View, Image } from 'react-native';
-import { TextInput, Button, Text, HelperText, Dialog, Portal} from 'react-native-paper';
+import { TextInput, Button, Text, HelperText, Dialog, Portal } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { AuthContext } from '../context/AuthContext';
@@ -42,7 +42,7 @@ const Login = () => {
         if (!email || !password) {
             setError('Both fields are required');
         } else if (!error) {
-            if ((email.toLocaleLowerCase() === 'w@g.com') && password === '12345') {
+            if ((email.toLocaleLowerCase() === 'waiter@gmail.com') && password === '12345') {
                 setLoading(true);
                 let res = await fetchOfflineData();
                 if (res) {
@@ -83,15 +83,17 @@ const Login = () => {
     return (
         <View style={styles.container}>
 
-            <View style={{ flex: 1.5, justifyContent: 'center', }} >
-                <Image
-                    source={require('../assets/images/login_waiter.png')} // Replace with your logo URL or local image
-                    style={styles.logo}
-                    resizeMode='contained'
-                />
+            <View style={{ justifyContent: 'center', }} >
+                {/* <View style={{position:'absolute',backgroundColor:'red',alignSelf:'center'}} > */}
+                    <Image
+                        source={require('../assets/images/login_waiter.png')} // Replace with your logo URL or local image
+                        style={styles.logo}
+                        resizeMode='contained'
+                    />
+                {/* </View> */}
             </View>
             {/* Welcome Message */}
-            <View style={{ flex: 2, width: '100%' }} >
+            <View style={{ width: '100%',top:-20 }} >
                 <View style={styles.welcomeTextView} >
                     <Text variant="headlineMedium" style={styles.welcomeText}>
                         Welcome to the
@@ -100,6 +102,7 @@ const Login = () => {
                         Waitress App !
                     </Text>
                 </View>
+
 
                 {/* Email Input */}
                 <TextInput
@@ -110,7 +113,7 @@ const Login = () => {
                     keyboardType="email-address"
                     error={!!error}
                     style={styles.input}
-                    left={<TextInput.Icon icon="email" color={colors.splash_background}/>}
+                    left={<TextInput.Icon icon="email" color={colors.splash_background} />}
                     activeOutlineColor={colors.splash_background}
                 />
                 {error ? <HelperText type="error" padding='none' style={{ alignSelf: 'flex-start', }} visible>{error}</HelperText> : null}
@@ -192,7 +195,7 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         fontSize: 35,
         fontWeight: 'bold',
-        color:colors.splash_background
+        color: colors.splash_background
     },
     welcomeTextView: {
         marginBottom: 10,
@@ -206,7 +209,7 @@ const styles = StyleSheet.create({
     },
     button: {
         marginTop: 8,
-        backgroundColor:colors.splash_background,
+        backgroundColor: colors.splash_background,
         width: '100%',
         borderRadius: 5
     },

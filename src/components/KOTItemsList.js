@@ -4,6 +4,7 @@ import { FontFamily } from '../assets/fonts/FontFamily'
 import { FontSize } from '../assets/fonts/Fonts'
 import Spacer from './shared/Spacer'
 import { Divider } from 'react-native-paper'
+import Entypo from 'react-native-vector-icons/Entypo';
 
 const KOTItemsList = ({data}) => {
 
@@ -11,7 +12,7 @@ const KOTItemsList = ({data}) => {
         <View style={{flex:1}}>
             <View style={styles.header} >
                 <Text style={styles.headerTxt} >Dish</Text>
-                <Text style={styles.headerTxt} >Quantity</Text>
+                <Text style={styles.headerTxt} >Quantity <Entypo name='cross' size={15} /> Price</Text>
             </View>
             <Spacer />
             <Divider bold />
@@ -25,7 +26,7 @@ const KOTItemsList = ({data}) => {
                                         <Text style={{ fontFamily: FontFamily.TTCommonsDemiBold }} >{item?.name}</Text>
                                         <Text style={{ fontFamily: FontFamily.TTCommonsRegular,fontSize:FontSize.medium }} >{item?.description||'-'}</Text>
                                     </View>
-                                    <Text style={{ fontFamily: FontFamily.TTCommonsRegular }} >{item?.quantity}</Text>
+                                    <Text style={{ fontFamily: FontFamily.TTCommonsRegular }} >{item?.quantity} {<Entypo name='cross'/>} {Number(item?.price)}</Text>
                                 </View>
                                 {true && <Divider />}
                             </View>

@@ -10,15 +10,19 @@ import colors from '../styles/colors';
 import { useSelector } from 'react-redux';
 import useGetTableStatus from '../hooks/useGetTableStatus';
 import moment from 'moment';
+import FAIcon from 'react-native-vector-icons/FontAwesome';
 
 const TableItem = ({ item,index,orderList }) => {
     const navigation = useNavigation();
     // alert(JSON.stringify(item))
-    const tableStatus = useGetTableStatus({orderList,tableId:item?.id});
-    console.log("tableStatus: 0 " + tableStatus);
+    const {tableOrder,loading} = useGetTableStatus({orderList,tableId:item?.id});
+
+    if(loading){
+        return <Text>Loading...</Text>
+    }
 
     return (
-        <TouchableOpacity onPress={() => navigation.navigate('TableView', {tableInfo:item})} style={{ ...styles.tableView, backgroundColor:!tableStatus?colors.white:colors.bookedTable }} >
+        <TouchableOpacity onPress={() => navigation.navigate('TableView', {tableInfo:item})} style={{ ...styles.tableView, backgroundColor:tableOrder?.status==1?colors.bookedTable:colors.white }} >
         <View style={styles.tableItem} >
             <View>
                 <OctIcon name='people' size={25} style={{}} />
@@ -27,8 +31,8 @@ const TableItem = ({ item,index,orderList }) => {
             <Text style={{ fontSize:FontSize.h4,fontFamily:FontFamily.TTCommonsDemiBold}} >{item?.table_no}</Text>
         </View>
         <View style={{ ...styles.tableItem, alignItems: 'flex-end' }} >
-            <Text style={{fontFamily:FontFamily.TTCommonsMedium,fontSize:FontSize.small }} >{tableStatus?moment(tableStatus?.created_at, "DD-MM-YYYY hh:mm A").format("hh:mm A"):'--'}</Text>
-            <Text style={{ fontFamily:FontFamily.TTCommonsMedium,fontSize:FontSize.medium }} >Rs. {Number(tableStatus?.sub_total)||'NA'}</Text>
+            <Text style={{fontFamily:FontFamily.TTCommonsMedium,fontSize:FontSize.small }} >{tableOrder?.status==1?moment(tableOrder?.created_at, "DD-MM-YYYY hh:mm A").format("hh:mm A"):'__ : __'}</Text>
+            <Text style={{ fontFamily:FontFamily.TTCommonsMedium,fontSize:FontSize.medium }} ><FAIcon name='rupee' /> {tableOrder?.status==1?Number(tableOrder?.sub_total):'--'||'NA'}</Text>
         </View>
     </TouchableOpacity>
     )
@@ -36,9 +40,7 @@ const TableItem = ({ item,index,orderList }) => {
 
 const TablesList = ({ floor }) => {
     const orderList = useSelector(state=>state.orderList.orders);
-    // console.log("tetetet",JSON.stringify(orderList));
     const {tables} = useGetTables(floor);
-    console.log({tables});
 
     return (
         <FlatList

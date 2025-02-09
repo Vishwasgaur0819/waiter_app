@@ -2,8 +2,11 @@ import { useEffect, useState } from 'react';
 
 const useGetTableStatus = ({ orderList, tableId }) => {
     const [tableOrder, setTableOrder] = useState(null);
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
+        setLoading(true)
         if (orderList?.length) {
+            
             const filteredOrders = orderList.filter(order =>
                 Number(order?.table_id) == Number(tableId)
                 && order?.order_number != 'null'
@@ -17,9 +20,10 @@ const useGetTableStatus = ({ orderList, tableId }) => {
                 setTableOrder(latest);
             }
         }
+        setLoading(false)
     }, [orderList, tableId]);
 
-    return tableOrder;
+    return {tableOrder,loading};
 };
 
 export default useGetTableStatus;

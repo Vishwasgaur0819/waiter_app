@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import colors from '../styles/colors'
 import FloorTableTitleCard from '../components/FloorTableTitleCard'
-import { Button } from 'react-native-paper'
+import { Button, Dialog, Divider, Portal } from 'react-native-paper'
 import { FontFamily } from '../assets/fonts/FontFamily'
 import KOTItemsList from '../components/KOTItemsList'
 import Spacer from '../components/shared/Spacer'
@@ -12,17 +12,21 @@ import { postData } from '../api/apiRequest'
 import apiRoutes from '../api/apiEndpoints'
 import useGetFloors from '../hooks/useGetFloors'
 import { removeItemsByTableId } from '../store/reducers/orderedItemSlice'
+import { FontSize } from '../assets/fonts/Fonts'
+import FAIcon from 'react-native-vector-icons/FontAwesome';
 
 const KOT = ({ route, navigation }) => {
 
     const dispatch = useDispatch()
     const orderedItems = useSelector(state => state.orderedItems?.orderItems);
+    const {network} = useSelector(state=>state.network);
     const data = route.params.data || route?.params.orderItem
     const { floors, loading } = useGetFloors();
 
     const [filterData, setFilterData] = useState([])
     const [floorName, setFloorName] = useState("");
     const [floorId, setFloorId] = useState("");
+    const[showSuccessDialog,setShowSuccessDialog]= useState(false);
 
 
     const tableId = data[0]?.tableId || data?.table_id;
@@ -70,7 +74,6 @@ const KOT = ({ route, navigation }) => {
 
 
             Object.values(data).forEach(item => {
-                console.log('item', item)
                 const { tableId } = item;
 
                 if (!groupedData[tableId]) {
@@ -103,7 +106,7 @@ const KOT = ({ route, navigation }) => {
         try {
             //network condition lgaani hai //
 
-            if (true) {
+            if (network) {
                 const tableIdsToDelete = [...new Set(filterData.map(item => item.tableId))];
 
                 const transformedData = {
@@ -117,18 +120,18 @@ const KOT = ({ route, navigation }) => {
                             grand_total: 0,
                             paid: 0,
                             created_user_id: 3,
-                            updated_user_id: 4,
+                            // updated_user_id: 4,
                             business_id: filterData[0]?.business_id,
                             user_id: filterData[0]?.user_id,
                             table_id: filterData[0]?.tableId,
-                            table: `${floorName} Table no:${filterData[0]?.tableNo} `,
-                            order_type: "table",
-                            payment_method: "Pending",
+                            table: `${floorName} Table No : ${filterData[0]?.tableNo} `,
+                            order_type: "DineIn",
+                            payment_method: "Cash",
                             status: 1,
-                            note: "",
+                            note: "Order from waiter app",
                             items: filterData.map(item => ({
                                 product_id: item.id,
-                                cart_id: "",
+                                cart_id: "null",
                                 product_name: item.name,
                                 description: "null",
                                 quantity: item.quantity,
@@ -140,20 +143,18 @@ const KOT = ({ route, navigation }) => {
                         }
                     ]
                 }
-                console.log("transformdata",JSON.stringify(transformedData));
                 if (transformedData) {
                     const response = await postData(apiRoutes.postSaveOrder, transformedData);
                     if (response?.message == 'Data Sync successfully.') {
                         dispatch(removeItemsByTableId(tableIdsToDelete));
-                        alert(response?.message)
-                        navigation.navigate('Home')
+                        setShowSuccessDialog(true)
                     } else {
                         alert(response?.message)
                     }
                 }
 
             } else {
-                alert('Network is unable.');
+                alert('No internet connection');
             }
         } catch (err) {
             console.error('Error in handleSaveOrder', err);
@@ -164,6 +165,24 @@ const KOT = ({ route, navigation }) => {
     return (
         <View style={styles.mainView}>
             <Header title='KOT' onPress={() => navigation.navigate('Home')} />
+            {/* ------ */}
+
+            <Portal>
+                <Dialog visible={showSuccessDialog}>
+                    {/* <Dialog.Title>Order has been placed successfully!</Dialog.Title> */}
+                    <Dialog.Content>
+                        <Text style={{fontSize:FontSize.h3,fontFamily:FontFamily.TTCommonsRegular}} >Order has been placed successfully!</Text>
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                        <Button onPress={() => {
+                            setShowSuccessDialog(false);
+                            navigation.navigate('Home');
+                        }}>Okay</Button>
+                    </Dialog.Actions>
+                </Dialog>
+            </Portal>
+
+            {/* ------ */}
             <View style={styles.container} >
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }} >
                     {/* <FloorTableTitleCard title={title} /> */}
@@ -181,12 +200,22 @@ const KOT = ({ route, navigation }) => {
                 </View>
                 <Spacer />
                 <KOTItemsList data={filterData} />
+                <View>
+                    <View style={[styles.header, styles.itemsContainer]} >
+                        <View style={{ width: '80%' }}>
+                            <Text style={{ fontFamily: FontFamily.TTCommonsDemiBold }} >Sub Total : </Text>
+                            {/* <Text style={{ fontFamily: FontFamily.TTCommonsRegular, fontSize: FontSize.medium }} >{}</Text> */}
+                        </View>
+                        <Text style={{ fontFamily: FontFamily.TTCommonsMedium, }} ><FAIcon name='rupee' /> {filterData?.reduce((acc, item) => acc + (item.quantity * parseFloat(item?.price)), 0).toFixed(2)}</Text>
+                    </View>
+                    {true && <Divider />}
+                </View>
                 <Spacer />
                 <View style={{ flexDirection: 'row', alignItems: 'center' }} >
                     <Button labelStyle={{ fontFamily: FontFamily.TTCommonsBold }} textColor={colors.splash_background} mode='elevated' style={{ borderRadius: 0, padding: 0 }} onPress={() => handleSaveOrder()}>
                         Save Order
                     </Button>
-                    <Button icon="printer" labelStyle={{ fontFamily: FontFamily.TTCommonsBold }} textColor={colors.splash_background} mode='elevated' style={{ borderRadius: 0, padding: 0, marginLeft: 10 }} onPress={() => console.log('Pressed')}>
+                    <Button icon="printer" labelStyle={{ fontFamily: FontFamily.TTCommonsBold }} textColor={colors.splash_background} mode='elevated' style={{ borderRadius: 0, padding: 0, marginLeft: 10 }} onPress={() => {}}>
                         Print KOT
                     </Button>
                 </View>
@@ -207,5 +236,8 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '93%',
         alignSelf: 'center',
-    }
+    },
+    header: { alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row' },
+    headerTxt: { fontFamily: FontFamily.TTCommonsBold, fontSize: FontSize.h4 },
+    itemsContainer: { paddingVertical: 5 }
 })

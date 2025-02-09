@@ -8,13 +8,15 @@ import { FontFamily } from '../assets/fonts/FontFamily'
 import { FontSize } from '../assets/fonts/Fonts'
 import FAIcon from 'react-native-vector-icons/AntDesign';
 import { useSelector } from 'react-redux'
+import useGetFloors from '../hooks/useGetFloors'
+import moment from 'moment'
 
 const Cart = ({navigation}) => {
   const [tables, setTables] = useState([]);
-
+  const {floors}=useGetFloors();
   const orderedItems = useSelector(state => state.orderedItems?.orderItems);
+  const getHall = (id)=>floors?.filter(item => item.id==id)[0]?.name;
 
-  // console.log("orderedItems", orderedItems);
   useEffect(() => {
     const groupDataByTable = (data) => {
       const groupedData = {};
@@ -36,7 +38,6 @@ const Cart = ({navigation}) => {
   }, [orderedItems])
 
 
-
   return (
     <View style={styles.mainView} >
       <Header title='CART' onPress={()=>navigation.navigate('Home')} />
@@ -47,8 +48,8 @@ const Cart = ({navigation}) => {
               return (
                 <TouchableOpacity onPress={()=>{navigation.navigate('KOT',{data:tables[item]})}} key={item} style={{ flexDirection: 'row', backgroundColor: colors.white, marginTop: 10, paddingVertical: 7, paddingHorizontal: 10, justifyContent: 'space-between', borderWidth: 1, borderColor: colors.border }} >
                   <View style={{ flexDirection: 'row', alignItems: 'center', }} >
-                    <Text style={{ fontFamily: FontFamily.TTCommonsDemiBold, fontSize: FontSize.h4 }} >Table No {tables[item]?.[0]?.tableNo||'NA'}</Text>
-                    <Text style={{ fontFamily: FontFamily.TTCommonsDemiBold, marginLeft: 20, fontSize: FontSize.h4 }} >03:14 PM</Text>
+                    <Text style={{ fontFamily: FontFamily.TTCommonsDemiBold, fontSize: FontSize.h4 }} >{` ${getHall(tables[item]?.[0]?.floor)}  Table No ${tables[item]?.[0]?.tableNo||'NA'}`}</Text>
+                    <Text style={{ fontFamily: FontFamily.TTCommonsDemiBold, marginLeft: 20, fontSize: FontSize.h4 }} >{tables[item]?.[0]?.time||'--'}</Text>
                   </View>
                   <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', }} >
                     <FAIcon name='eye' color={colors.splash_background} size={25} />
