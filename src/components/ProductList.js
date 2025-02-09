@@ -80,8 +80,8 @@ const ProductList = ({ orderedItems, category, tableId, floor, tableNo }) => {
     );
 
     const handleItemChange = useCallback((item, quantity) => {
-        console.log('ITEMMM', item)
-        console.log('quantity', quantity)
+        // console.log('ITEMMM', item)
+        // console.log('quantity', quantity)
         dispatch(addItemToTableOrder({ tableId, item: { id: item.id, quantity, name: item.name, description: item?.description, floor, tableNo, tableId, tableNo, business_id: item.business_id, price: item?.price, user_id: item?.user_id, status: item?.status } }));
     }, [dispatch, tableId]);
 

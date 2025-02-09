@@ -12,9 +12,13 @@ const colors = {
     // --------------------------
     splash_background:'#36454F',
     forgot_passward_txt:'#E80724',
-    printtable:'#FB7373',
-    bookedtable:'#8AB55E',
-    opentable:'#F5F5F5'
+    // printtable:'#FB7373',
+    // bookedtable:'#8AB55E',
+    // opentable:'#F5F5F5',
+    bookedTable:'#d1d8d1',
+    openTable:'#FFFFFF',
+    printTable:'#ffc7c7'
+
 };
 
 export default colors;

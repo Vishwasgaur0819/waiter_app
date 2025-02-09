@@ -37,7 +37,7 @@ const Profile = ({ navigation }) => {
                         <FAIcon name='user' color={colors.grey} size={90} />
                     </View>
                     <View style={{ flex: 0.9, top: 5 }}>
-                        <Text style={styles.name}>Arun Yagik</Text>
+                        <Text style={styles.name}>User Name</Text>
                         <Text style={styles.userId}>Emp. Id - 001</Text>
                     </View>
                 </View>

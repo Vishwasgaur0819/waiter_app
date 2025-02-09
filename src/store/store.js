@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import orderedItemSlice from './reducers/orderedItemSlice';
+import orderListSlice from './reducers/orderListSlice';
 
 // Define slices that need to be persisted
 const slicesToPersist = ['orderedItems'];
@@ -9,6 +10,7 @@ const slicesToPersist = ['orderedItems'];
 // Define the reducers
 const rootReducer = combineReducers({
     orderedItems: orderedItemSlice,
+    orderList:orderListSlice
     // Add other slices here if needed
 });
 

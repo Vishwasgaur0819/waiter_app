@@ -13,9 +13,11 @@ import colors from '../styles/colors'
 import Header from '../components/shared/Header'
 import { useDispatch } from 'react-redux'
 import { removeAllItems } from '../store/reducers/orderedItemSlice'
+import useGetOrderList from '../hooks/useGetOrderList'
 
 const Home = ({ navigation }) => {
-  // const {floors,loading} = useGetLocalData();
+
+  useGetOrderList();
   const [typeId, setTypeId] = useState(null);
   const dispatch = useDispatch();
 

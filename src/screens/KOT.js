@@ -122,13 +122,13 @@ const KOT = ({ route, navigation }) => {
                             user_id: filterData[0]?.user_id,
                             table_id: filterData[0]?.tableId,
                             table: `${floorName} Table no:${filterData[0]?.tableNo} `,
-                            order_type: "Takeaway",
-                            payment_method: "Cash",
-                            status: filterData[0]?.status,
-                            note: "Arun#",
+                            order_type: "table",
+                            payment_method: "Pending",
+                            status: 1,
+                            note: "",
                             items: filterData.map(item => ({
                                 product_id: item.id,
-                                cart_id: "arun@",
+                                cart_id: "",
                                 product_name: item.name,
                                 description: "null",
                                 quantity: item.quantity,
@@ -140,6 +140,7 @@ const KOT = ({ route, navigation }) => {
                         }
                     ]
                 }
+                console.log("transformdata",JSON.stringify(transformedData));
                 if (transformedData) {
                     const response = await postData(apiRoutes.postSaveOrder, transformedData);
                     if (response?.message == 'Data Sync successfully.') {
