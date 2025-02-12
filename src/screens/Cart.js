@@ -12,6 +12,7 @@ import useGetFloors from '../hooks/useGetFloors'
 import moment from 'moment'
 
 const Cart = ({navigation}) => {
+  
   const [tables, setTables] = useState([]);
   const {floors}=useGetFloors();
   const orderedItems = useSelector(state => state.orderedItems?.orderItems);
@@ -40,7 +41,7 @@ const Cart = ({navigation}) => {
 
   return (
     <View style={styles.mainView} >
-      <Header title='CART' onPress={()=>navigation.navigate('Home')} />
+      <Header title='CART' onPress={()=>navigation.navigate('Dashboard')} />
       <View style={styles.container}>
         <ScrollView style={{}} >
           {

@@ -31,7 +31,7 @@ const AllOrders = ({ navigation }) => {
 
   return (
     <View style={styles.mainView}>
-      <Header title='All Orders' />
+      <Header title='All Orders' onPress={()=>navigation.navigate('Dashboard')} />
       <View style={styles.container}>
         {loading ? (
           <LoadingPage />

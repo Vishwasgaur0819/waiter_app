@@ -19,14 +19,15 @@ const KOT = ({ route, navigation }) => {
 
     const dispatch = useDispatch()
     const orderedItems = useSelector(state => state.orderedItems?.orderItems);
-    const {network} = useSelector(state=>state.network);
+    const { network } = useSelector(state => state.network);
     const data = route.params.data || route?.params.orderItem
     const { floors, loading } = useGetFloors();
 
     const [filterData, setFilterData] = useState([])
     const [floorName, setFloorName] = useState("");
     const [floorId, setFloorId] = useState("");
-    const[showSuccessDialog,setShowSuccessDialog]= useState(false);
+    const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+    const [note, setNote] = useState(false);
 
 
     const tableId = data[0]?.tableId || data?.table_id;
@@ -171,7 +172,7 @@ const KOT = ({ route, navigation }) => {
                 <Dialog visible={showSuccessDialog}>
                     {/* <Dialog.Title>Order has been placed successfully!</Dialog.Title> */}
                     <Dialog.Content>
-                        <Text style={{fontSize:FontSize.h3,fontFamily:FontFamily.TTCommonsRegular}} >Order has been placed successfully!</Text>
+                        <Text style={{ fontSize: FontSize.h3, fontFamily: FontFamily.TTCommonsRegular }} >Order has been placed successfully!</Text>
                     </Dialog.Content>
                     <Dialog.Actions>
                         <Button onPress={() => {
@@ -188,18 +189,24 @@ const KOT = ({ route, navigation }) => {
                     {/* <FloorTableTitleCard title={title} /> */}
                     <FloorTableTitleCard title={`${route?.params?.orderItem?.table == undefined ? `${floorName} Table no:${filterData[0]?.tableNo}` : `${route?.params?.orderItem?.table}`}`} />
 
+
+                    
+
+
+
+
                     <Button onPress={() => navigation.navigate('TableView', {
                         tableInfo: { hall_id: floor, table_no: tableNo, id: tableId },
                         navigationFrom: route?.params?.navigateFrom == 'AllOrders' ? 'AllOrders' : 'KOT'
                     })} icon="pencil" labelStyle={{ fontFamily: FontFamily.TTCommonsBold }} textColor={colors.splash_background} mode='text' style={{ borderRadius: 0, padding: 0 }}>
                         Edit Dish
                     </Button>
-                    {/* <Button icon="note" labelStyle={{ fontFamily: FontFamily.TTCommonsBold }} textColor={colors.splash_background} mode='text' style={{ borderRadius: 0, padding: 0 }} onPress={() => console.log('Pressed')}>
+                     <Button icon="note-edit" labelStyle={{ fontFamily: FontFamily.TTCommonsBold }} textColor={colors.splash_background} mode='text' style={{ borderRadius: 0, padding: 0 }} onPress={() => setNote (true)}>
                         Note
-                    </Button> */}
+                    </Button> 
                 </View>
                 <Spacer />
-                <KOTItemsList data={filterData} />
+                <KOTItemsList data={filterData}  note={note}/>
                 <View>
                     <View style={[styles.header, styles.itemsContainer]} >
                         <View style={{ width: '80%' }}>
@@ -215,7 +222,7 @@ const KOT = ({ route, navigation }) => {
                     <Button labelStyle={{ fontFamily: FontFamily.TTCommonsBold }} textColor={colors.splash_background} mode='elevated' style={{ borderRadius: 0, padding: 0 }} onPress={() => handleSaveOrder()}>
                         Save Order
                     </Button>
-                    <Button icon="printer" labelStyle={{ fontFamily: FontFamily.TTCommonsBold }} textColor={colors.splash_background} mode='elevated' style={{ borderRadius: 0, padding: 0, marginLeft: 10 }} onPress={() => {}}>
+                    <Button icon="printer" labelStyle={{ fontFamily: FontFamily.TTCommonsBold }} textColor={colors.splash_background} mode='elevated' style={{ borderRadius: 0, padding: 0, marginLeft: 10 }} onPress={() => { }}>
                         Print KOT
                     </Button>
                 </View>

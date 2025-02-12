@@ -14,7 +14,8 @@ const orderedItemSlice = createSlice({
                 console.log("tableOrders in redux ", state.orderItems)
                 return
             }
-            state.orderItems[`${tableId}-${item.id}`] = { ...item,tableId,time:moment().format('hh:mm A') }
+            state.orderItems[`${tableId}-${item.id}`] = { ...item,tableId,time:moment().format('hh:mm A'),   note: item.note }
+            console.log(' action.payload',state.orderItems)
         },
       
         removeAllItems:(state, action) => {
